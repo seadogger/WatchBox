@@ -124,6 +124,7 @@ struct CameraGridView: View {
                 ForEach(viewModel.cameras) { camera in
                     CameraGridCell(
                         camera: camera,
+                        password: viewModel.getPassword(for: camera.id),
                         status: viewModel.getStatus(for: camera.id)
                     )
                     .aspectRatio(16/9, contentMode: .fit)
@@ -147,10 +148,11 @@ struct CameraGridView: View {
 
 struct CameraGridCell: View {
     let camera: Camera
+    let password: String?
     @Binding var status: StreamStatus
 
     var body: some View {
-        MockVideoPlayerView(camera: camera, status: $status)
+        RTSPVideoPlayerView(camera: camera, password: password, status: $status)
             .clipShape(RoundedRectangle(cornerRadius: 12))
             .overlay {
                 RoundedRectangle(cornerRadius: 12)
@@ -169,8 +171,9 @@ struct FullscreenCameraView: View {
 
     var body: some View {
         NavigationStack {
-            MockVideoPlayerView(
+            RTSPVideoPlayerView(
                 camera: camera,
+                password: viewModel.getPassword(for: camera.id),
                 status: viewModel.getStatus(for: camera.id)
             )
             .ignoresSafeArea()

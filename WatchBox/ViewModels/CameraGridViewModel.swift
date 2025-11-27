@@ -51,6 +51,11 @@ final class CameraGridViewModel: ObservableObject {
         }
     }
 
+    /// Get password for a camera from Keychain
+    func getPassword(for cameraID: UUID) -> String? {
+        return try? repository.getCredentials(for: cameraID)
+    }
+
     /// Get stream status for a camera
     func getStatus(for cameraID: UUID) -> Binding<StreamStatus> {
         Binding(
