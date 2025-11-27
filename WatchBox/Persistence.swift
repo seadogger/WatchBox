@@ -14,15 +14,25 @@ struct PersistenceController {
     static let preview: PersistenceController = {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
-        for _ in 0..<10 {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
+
+        // Create sample cameras for preview
+        for i in 0..<4 {
+            let entity = NSEntityDescription.entity(forEntityName: "Camera", in: viewContext)!
+            let camera = NSManagedObject(entity: entity, insertInto: viewContext)
+
+            camera.setValue(UUID(), forKey: "id")
+            camera.setValue("Camera \(i + 1)", forKey: "name")
+            camera.setValue("rtsp://192.168.1.10\(i):554/stream1", forKey: "rtspURL")
+            camera.setValue("192.168.1.10\(i)", forKey: "ipAddress")
+            camera.setValue(Int16(554), forKey: "port")
+            camera.setValue(true, forKey: "isActive")
+            camera.setValue(Int16(i), forKey: "gridPosition")
+            camera.setValue(Date(), forKey: "dateAdded")
         }
+
         do {
             try viewContext.save()
         } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             let nsError = error as NSError
             fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
         }

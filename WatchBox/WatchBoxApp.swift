@@ -14,8 +14,15 @@ struct WatchBoxApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            CameraListView(viewModel: createViewModel())
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
+    }
+
+    private func createViewModel() -> CameraManagementViewModel {
+        let context = persistenceController.container.viewContext
+        let keychain = KeychainService()
+        let repository = CameraRepository(context: context, keychain: keychain)
+        return CameraManagementViewModel(repository: repository)
     }
 }
