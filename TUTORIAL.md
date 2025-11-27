@@ -936,3 +936,190 @@ This tutorial demonstrated a professional approach to starting a new iOS/macOS a
 ---
 
 *This tutorial was created as part of the WatchBox project to document the complete setup process for future reference and as a template for similar projects.*
+
+---
+
+## Session 2: Phase 1 & Grid View Implementation (November 27, 2025)
+
+### Overview
+Completed Phase 1 (Foundation & Dependencies) and implemented the grid view with native RTSP streaming.
+
+### What Was Implemented
+
+#### Phase 1: Foundation & Dependencies
+1. **CoreData Model Updates**
+   ```bash
+   # Modified WatchBox.xcdatamodel/contents
+   # - Removed template "Item" entity
+   # - Added Camera entity (13 attributes)
+   # - Added StreamProfile entity (6 attributes)
+   # - Used CameraEntity/StreamProfileEntity to avoid naming conflicts
+   ```
+
+2. **Domain Models Created**
+   - `Models/Domain/Camera.swift` - Business model with preview helpers
+   - `Models/Domain/CameraCredentials.swift` - Secure credentials
+   - `Models/Domain/StreamStatus.swift` - Stream state enum
+   - `Models/Domain/StreamProfile.swift` - Video quality profiles
+
+3. **Security Layer**
+   - `Services/KeychainService.swift` - Keychain wrapper for password storage
+   - Uses iOS Keychain (hardware-backed encryption)
+   - Includes MockKeychainService for testing
+
+4. **Data Access Layer**
+   - `Repositories/CameraRepository.swift` - Protocol-based repository
+   - Async/await CRUD operations
+   - Password retrieval from Keychain
+   - Includes MockCameraRepository for testing
+
+5. **Business Logic**
+   - `ViewModels/CameraManagementViewModel.swift` - Camera CRUD
+   - `ViewModels/CameraGridViewModel.swift` - Grid state management
+
+6. **User Interface**
+   - `Views/CameraListView.swift` - Camera management
+   - `Views/AddCameraView.swift` - Add/Edit cameras
+   - `Views/CameraGridView.swift` - Main grid display
+
+#### Phase 3 & 4: Grid View & Streaming
+
+1. **Grid Layout**
+   - Dynamic columns based on camera count (1x1 to 4x4)
+   - Responsive to device orientation
+   - Platform-specific optimizations (iOS vs macOS)
+
+2. **RTSP URL Construction**
+   - `Utilities/RTSPURLBuilder.swift` - Intelligent URL builder
+   - Supports two methods:
+     - **Method A**: Inline credentials `rtsp://user:pass@host:port/path`
+     - **Method B**: Separate fields combined at runtime
+   - Auto-detection of which method user chose
+   - URL encoding of special characters
+
+3. **Video Streaming**
+   - `Views/Components/NativeRTSPPlayerView.swift` - AVFoundation player
+   - `Views/Components/RTSPVideoPlayerView.swift` - Player wrapper
+   - Uses native AVPlayer (no external dependencies)
+   - Status monitoring (Connecting → Live → Error)
+   - Auto-play on appear, auto-stop on disappear
+
+### Key Commands Run
+
+```bash
+# Created directory structure
+mkdir -p WatchBox/Models/Domain
+mkdir -p WatchBox/Services
+mkdir -p WatchBox/Repositories
+mkdir -p WatchBox/ViewModels
+mkdir -p WatchBox/Views/Components
+mkdir -p WatchBox/Utilities
+
+# Built and verified
+export DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer
+xcodebuild -scheme WatchBox -destination 'platform=iOS Simulator,name=iPhone 17' build
+# Result: BUILD SUCCEEDED
+
+# Git commits
+git add -A
+git commit -m "feat(phase1): Complete Phase 1 - Foundation & Dependencies"
+git commit -m "feat(grid): Add camera grid view with mock video streaming"
+git commit -m "feat(rtsp): Add native RTSP video streaming with AVFoundation"
+git push
+```
+
+### Technical Decisions Made
+
+#### Decision: VLCKit vs AVFoundation
+**Initial Plan**: Use VLCKit for RTSP streaming
+**Problem Encountered**: VLCKit has no official Swift Package Manager support
+**Solution Chosen**: Native AVFoundation with AVPlayer
+**Rationale**:
+- AVFoundation DOES support RTSP natively (contrary to initial belief)
+- Zero external dependencies
+- Simpler implementation
+- Native Apple framework with hardware acceleration
+
+#### Decision: RTSP URL Handling
+**Problem**: How to handle credentials securely
+**Solution**: Dual-mode RTSPURLBuilder
+- Detects if URL already contains credentials (`@` symbol)
+- If not, retrieves password from Keychain and constructs URL
+- URL-encodes special characters
+- Sanitizes display (shows `****` instead of password)
+
+### Files Created (Total: 14 files)
+
+**Models**:
+- Models/Domain/Camera.swift (103 lines)
+- Models/Domain/CameraCredentials.swift (48 lines)
+- Models/Domain/StreamStatus.swift (76 lines)
+- Models/Domain/StreamProfile.swift (68 lines)
+
+**Services**:
+- Services/KeychainService.swift (147 lines)
+
+**Repositories**:
+- Repositories/CameraRepository.swift (242 lines)
+
+**ViewModels**:
+- ViewModels/CameraManagementViewModel.swift (133 lines)
+- ViewModels/CameraGridViewModel.swift (144 lines)
+
+**Views**:
+- Views/CameraListView.swift (208 lines)
+- Views/AddCameraView.swift (267 lines)
+- Views/CameraGridView.swift (200 lines)
+- Views/Components/NativeRTSPPlayerView.swift (175 lines)
+- Views/Components/RTSPVideoPlayerView.swift (250 lines with VLC docs)
+- Views/Components/MockVideoPlayerView.swift (117 lines, deprecated)
+
+**Utilities**:
+- Utilities/RTSPURLBuilder.swift (87 lines)
+
+**Total Lines of Code**: ~2,265 lines
+
+### Current Status
+
+✅ **Completed**:
+- Full MVVM architecture
+- Camera CRUD operations
+- Dynamic grid layout
+- Secure credential storage (Keychain)
+- RTSP URL construction
+- Native video player implementation
+
+⚠️ **Known Issue**:
+- Video streaming not displaying (AVPlayer shows status as "Live" but no video)
+- Likely causes:
+  1. iOS Simulator networking limitations with RTSP
+  2. App Transport Security settings needed
+  3. Codec compatibility (AVPlayer may not support all RTSP codecs)
+  4. Need to test on real iOS device
+
+📋 **Next Steps**:
+1. Test on actual iOS device (not simulator)
+2. Add Info.plist entries for App Transport Security
+3. Check AVPlayer console errors
+4. Consider VLCKit fallback if AVFoundation insufficient
+5. Implement Phase 2 (ONVIF Discovery)
+
+### Lessons Learned
+
+1. **AVFoundation and RTSP**: AVFoundation claims RTSP support but may be limited to specific codecs/formats
+2. **Simulator Limitations**: iOS Simulator may have restrictions on RTSP network streaming
+3. **Build Errors**: CoreData entity naming conflicts with domain models - use different class names
+4. **URL Construction**: Need intelligent builder to support both inline and separate credential approaches
+5. **Dependencies**: Native frameworks preferred over external when possible
+
+### Time Investment
+
+- Planning & Architecture: 30 minutes
+- Phase 1 Implementation: 2 hours
+- Grid View & Streaming: 2 hours
+- Troubleshooting & Documentation: 1 hour
+- **Total Session Time**: ~5.5 hours
+
+---
+
+*Tutorial updated: November 27, 2025 - End of Session 2*

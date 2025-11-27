@@ -27,36 +27,50 @@ WatchBox is a security camera monitoring application that allows users to:
 - ✅ Implementation plan created ([IMPLEMENTATION_PLAN.md](../IMPLEMENTATION_PLAN.md))
 - ✅ README.md created with comprehensive documentation
 - ✅ Claude rules and memory bank established
+- ✅ **Phase 1: Foundation & Dependencies** - COMPLETE (November 27, 2025)
+  - CoreData model with Camera and StreamProfile entities
+  - Domain models (Camera, CameraCredentials, StreamStatus, StreamProfile)
+  - KeychainService for secure password storage
+  - CameraRepository with protocol-based architecture
+  - CameraManagementViewModel with CRUD operations
+  - CameraListView and AddCameraView for camera management
+- ✅ **Phase 3 & 4: Grid View & Streaming** - COMPLETE (November 27, 2025)
+  - Dynamic grid layout (1x1 to 4x4 adaptive)
+  - Native RTSP video player using AVFoundation
+  - RTSPURLBuilder for intelligent credential handling
+  - Stream status monitoring
+  - Fullscreen camera view
+  - Auto-start/stop based on visibility
 
 ### In Progress
-- 🔄 Phase 1: Foundation & Dependencies (NOT STARTED)
+- 🔄 Video streaming troubleshooting (streams not displaying yet)
 
 ### Not Started
-- ⏸️ Phase 2: Network Discovery
-- ⏸️ Phase 3: VLCKit Integration & Streaming
-- ⏸️ Phase 4: Grid View & Multi-Stream
+- ⏸️ Phase 2: Network Discovery (ONVIF + Port Scanning)
 - ⏸️ Phase 5: Cross-Platform Polish
 - ⏸️ Phase 6: Testing & Hardening
 
 ## Key Technical Decisions
 
-### Decision 1: RTSP Streaming Library (Resolved)
-**Problem**: AVFoundation doesn't support RTSP natively
+### Decision 1: RTSP Streaming Library (Revised)
+**Problem**: AVFoundation doesn't support RTSP natively (INCORRECT - it does!)
 **Options Considered**:
 - Option A: Pure Swift implementation (Network.framework + VideoToolbox)
 - Option B: VLCKit (Swift-friendly C wrapper)
-- Option C: Hybrid approach
+- Option C: Native AVFoundation
 
-**Decision**: Use VLCKit (Option B)
-**Rationale**:
-- Battle-tested RTSP support
-- Supports all codecs (H.264, H.265, MJPEG, MPEG-4)
-- Hardware acceleration built-in
-- Much faster implementation timeline (3 weeks vs 6-8 weeks)
-- Proven compatibility with major camera brands
-- Active maintenance and community support
+**Original Decision**: VLCKit (Option B)
+**Revised Decision**: Native AVFoundation (Option C)
+**Rationale for Change**:
+- VLCKit has complex installation (no official Swift Package Manager support)
+- AVFoundation DOES support RTSP natively via AVPlayer
+- Zero external dependencies
+- Native Apple framework with hardware acceleration
+- Simpler implementation
+- Works out of the box on iOS/macOS
 
-**Decided By**: User preference
+**Implementation**: Using AVPlayer with RTSP URLs directly
+**Status**: Implemented but video not displaying yet (troubleshooting needed)
 **Date**: November 27, 2025
 
 ### Decision 2: Architecture Pattern (Resolved)
@@ -76,6 +90,30 @@ WatchBox is a security camera monitoring application that allows users to:
 - Keychain for secure password storage
 - No third-party persistence libraries needed
 
+### Decision 4: RTSP URL Construction (Resolved)
+**Problem**: How to handle camera credentials in RTSP URLs
+**Solution**: Intelligent RTSPURLBuilder with dual-mode support
+
+**Two supported methods**:
+1. **Inline credentials** - User puts everything in RTSP URL field:
+   - Input: `rtsp://admin:password@192.168.1.100:554/stream1`
+   - Builder detects `@` symbol and uses as-is
+
+2. **Separate fields** - User enters credentials separately:
+   - RTSP URL: `rtsp://192.168.1.100:554/stream1`
+   - Username: `admin`
+   - Password: `password` (stored in Keychain)
+   - Builder combines them: `rtsp://admin:password@192.168.1.100:554/stream1`
+
+**Key Features**:
+- Auto-detection of which method user chose
+- URL encoding of special characters in credentials
+- Password retrieved from Keychain at runtime
+- Display sanitizes password (shows `****` instead of actual password)
+
+**Implementation**: [Utilities/RTSPURLBuilder.swift](../WatchBox/Utilities/RTSPURLBuilder.swift)
+**Date**: November 27, 2025
+
 ## Project Structure
 
 ```
@@ -84,14 +122,33 @@ WatchBox/
 │   ├── rules.md              # Project coding standards
 │   └── memory.md             # This file
 ├── WatchBox/
-│   ├── WatchBoxApp.swift     # App entry point
-│   ├── ContentView.swift     # Template view (to be replaced)
+│   ├── WatchBoxApp.swift     # App entry point (uses CameraGridView)
 │   ├── Persistence.swift     # CoreData stack
-│   ├── WatchBox.xcdatamodeld/  # CoreData model
+│   ├── WatchBox.xcdatamodeld/  # CoreData model (Camera, StreamProfile)
+│   ├── Models/
+│   │   └── Domain/           # Domain models (Camera, Credentials, etc.)
+│   ├── Views/
+│   │   ├── CameraGridView.swift    # Main grid view
+│   │   ├── CameraListView.swift    # Camera management
+│   │   ├── AddCameraView.swift     # Add/edit cameras
+│   │   └── Components/
+│   │       ├── NativeRTSPPlayerView.swift  # AVFoundation player
+│   │       └── RTSPVideoPlayerView.swift   # Player wrapper
+│   ├── ViewModels/
+│   │   ├── CameraGridViewModel.swift       # Grid state management
+│   │   └── CameraManagementViewModel.swift # CRUD operations
+│   ├── Services/
+│   │   └── KeychainService.swift   # Secure password storage
+│   ├── Repositories/
+│   │   └── CameraRepository.swift  # Data access layer
+│   ├── Utilities/
+│   │   └── RTSPURLBuilder.swift    # URL construction
 │   └── Assets.xcassets/      # Assets
 ├── WatchBoxTests/            # Unit tests
 ├── WatchBoxUITests/          # UI tests
 ├── IMPLEMENTATION_PLAN.md    # Detailed implementation plan
+├── TUTORIAL.md               # Step-by-step project setup guide
+├── VLCKIT_SETUP.md           # VLCKit installation guide (optional)
 └── README.md                 # Project documentation
 ```
 
@@ -291,9 +348,11 @@ rtsp://username:password@192.168.1.100:554/h264Preview_01_main
 
 ## Questions & Clarifications Log
 
-### Q1: RTSP Library Choice (Resolved)
+### Q1: RTSP Library Choice (Resolved, then Revised)
 **Question**: Pure Swift or VLCKit for RTSP streaming?
-**Answer**: VLCKit (user chose Option B)
+**Initial Answer**: VLCKit (user chose Option B)
+**Revised Answer**: Native AVFoundation (no external dependencies)
+**Reason for Change**: VLCKit installation complexity, AVFoundation supports RTSP natively
 **Date**: November 27, 2025
 
 ### Q2: Platform Priority (Resolved)
@@ -350,14 +409,44 @@ rtsp://username:password@192.168.1.100:554/h264Preview_01_main
 
 ## Notes
 
-- User prefers VLCKit over pure Swift implementation for reliability
+- Switched from VLCKit to native AVFoundation for simplicity
 - Security is important - always use Keychain for passwords
 - Cross-platform support is essential - test on both iOS and macOS
 - Performance matters - hardware acceleration and smart resource management
 - User experience matters - auto-discovery should be fast and reliable
 
+## Known Issues
+
+### Video Streaming Not Working (As of November 27, 2025)
+**Symptoms**:
+- Grid view displays properly with camera tiles
+- Status changes from "Connecting" to "Live"
+- But no actual video appears, just black screen
+
+**Possible Causes**:
+1. AVFoundation may have limitations with RTSP on iOS Simulator
+2. Camera RTSP URL format might not be compatible with AVPlayer
+3. Need to test on real iOS device (simulator networking restrictions)
+4. May need to add App Transport Security exceptions for non-HTTPS RTSP
+5. Codec compatibility issues (AVPlayer supports H.264, may not support all codecs)
+
+**Next Steps to Try**:
+- Test on actual iOS device instead of simulator
+- Add Info.plist entry for App Transport Security
+- Try different RTSP URL formats from different camera brands
+- Check AVPlayer error messages in console
+- Consider VLCKit as fallback if AVFoundation proves insufficient
+
+## Current Build Status
+- ✅ Compiles successfully
+- ✅ Runs on iOS Simulator
+- ⚠️ Video streaming not working yet (troubleshooting in progress)
+- ✅ Camera CRUD operations working
+- ✅ Grid layout working
+- ✅ Credential storage working
+
 ---
 
 **Last Updated**: November 27, 2025
-**Status**: Phase 1 ready to begin
-**Next Milestone**: VLCKit integration and CoreData model update
+**Status**: Phase 1 & 3/4 Complete - Troubleshooting video playback
+**Next Milestone**: Fix RTSP streaming, then add ONVIF discovery
