@@ -178,7 +178,9 @@ struct FullscreenCameraView: View {
             )
             .ignoresSafeArea()
             .navigationTitle(camera.name)
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
+            #endif
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Done") {

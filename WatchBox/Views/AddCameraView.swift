@@ -34,11 +34,15 @@ struct AddCameraView: View {
 
                     TextField("IP Address", text: $ipAddress)
                         .textContentType(.none)
+                        #if os(iOS)
                         .keyboardType(.decimalPad)
+                        #endif
 
                     TextField("Port", text: $port)
                         .textContentType(.none)
+                        #if os(iOS)
                         .keyboardType(.numberPad)
+                        #endif
                 }
 
                 Section("Authentication") {
@@ -70,7 +74,9 @@ struct AddCameraView: View {
                 }
             }
             .navigationTitle("Add Camera")
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
+            #endif
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
@@ -171,11 +177,15 @@ struct EditCameraView: View {
 
                     TextField("IP Address", text: $ipAddress)
                         .textContentType(.none)
+                        #if os(iOS)
                         .keyboardType(.decimalPad)
+                        #endif
 
                     TextField("Port", text: $port)
                         .textContentType(.none)
+                        #if os(iOS)
                         .keyboardType(.numberPad)
+                        #endif
 
                     Toggle("Active", isOn: $isActive)
                 }
@@ -205,7 +215,9 @@ struct EditCameraView: View {
                 }
             }
             .navigationTitle("Edit Camera")
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
+            #endif
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {

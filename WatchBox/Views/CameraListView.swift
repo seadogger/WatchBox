@@ -142,12 +142,20 @@ struct CameraRow: View {
                     .frame(width: 60, height: 60)
 
                 if let thumbnailData = camera.thumbnailData,
-                   let uiImage = loadImage(from: thumbnailData) {
-                    Image(uiImage: uiImage)
+                   let image = loadImage(from: thumbnailData) {
+                    #if os(iOS)
+                    Image(uiImage: image)
                         .resizable()
                         .scaledToFill()
                         .frame(width: 60, height: 60)
                         .clipShape(RoundedRectangle(cornerRadius: 8))
+                    #elseif os(macOS)
+                    Image(nsImage: image)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 60, height: 60)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                    #endif
                 } else {
                     Image(systemName: "video")
                         .font(.title2)
