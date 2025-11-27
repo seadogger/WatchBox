@@ -14,15 +14,15 @@ struct WatchBoxApp: App {
 
     var body: some Scene {
         WindowGroup {
-            CameraListView(viewModel: createViewModel())
+            CameraGridView(viewModel: createGridViewModel())
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
 
-    private func createViewModel() -> CameraManagementViewModel {
+    private func createGridViewModel() -> CameraGridViewModel {
         let context = persistenceController.container.viewContext
         let keychain = KeychainService()
         let repository = CameraRepository(context: context, keychain: keychain)
-        return CameraManagementViewModel(repository: repository)
+        return CameraGridViewModel(repository: repository)
     }
 }
