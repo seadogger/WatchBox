@@ -444,9 +444,60 @@ rtsp://username:password@192.168.1.100:554/h264Preview_01_main
 - ✅ Camera CRUD operations working
 - ✅ Grid layout working
 - ✅ Credential storage working
+- ✅ Cross-platform iOS/macOS compatibility
+- ✅ Ready for TestFlight deployment
+
+## App Store & Deployment Information
+
+### App Store Connect
+- **App Name**: WatchBoxLive (changed from "WatchBox" due to naming conflict)
+- **Bundle ID**: seadogger.WatchBox
+- **Team ID**: C2D392S824
+- **Apple ID**: 6755855544
+- **SKU**: WatchBox-001
+- **Platforms**: iOS 26.0+, macOS 15.0+, tvOS (configured)
+- **Version**: 1.0 (Build 1)
+- **Status**: ✅ Ready for TestFlight
+
+### Required Capabilities
+1. **Keychain Sharing**
+   - Used for secure camera credential storage
+   - Configured in Apple Developer Portal
+
+2. **Network Extensions** (recommended)
+   - Used for RTSP streaming
+   - Used for future ONVIF camera discovery
+
+### Privacy Descriptions
+- **NSLocalNetworkUsageDescription**: "WatchBoxLive needs access to your local network to discover and connect to security cameras on your network."
+
+### App Icon
+- 1024x1024px blue gradient with camera symbol
+- Location: `WatchBox/Assets.xcassets/AppIcon.appiconset/icon-1024.png`
+- Created using Swift/AppKit script
+
+### Deployment Checklist
+- [x] App created in App Store Connect
+- [x] Bundle identifier registered (seadogger.WatchBox)
+- [x] Capabilities configured (Keychain Sharing, Network Extensions)
+- [x] Privacy descriptions added
+- [x] App icon created and integrated
+- [x] Cross-platform build issues resolved
+- [x] Archive build successful
+- [x] Code committed and pushed to GitHub
+- [x] Developer access granted to pipersec
+- [ ] Upload to TestFlight (next step)
+- [ ] Add beta testers
+- [ ] Submit for TestFlight beta review
+
+### GitHub Repository
+- **URL**: https://github.com/seadogger/WatchBox
+- **Owner**: seadogger
+- **Collaborators**: pipersec (developer access)
+- **Visibility**: Public
 
 ---
 
 **Last Updated**: November 27, 2025
-**Status**: Phase 1 & 3/4 Complete - Troubleshooting video playback
-**Next Milestone**: Fix RTSP streaming, then add ONVIF discovery
+**Status**: Phase 1 & 3/4 Complete - Ready for TestFlight deployment
+**Next Milestone**: Upload to TestFlight, then fix RTSP streaming and add ONVIF discovery

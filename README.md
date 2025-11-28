@@ -270,6 +270,8 @@ See [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) for the complete implementa
 - Secure credential storage (Keychain)
 - RTSP URL construction
 - Grid navigation and fullscreen view
+- iOS/macOS cross-platform compatibility
+- App Store deployment ready
 
 ⚠️ **In Progress:**
 - RTSP video streaming (implemented but not displaying video yet)
@@ -280,6 +282,22 @@ See [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) for the complete implementa
 2. Add App Transport Security exceptions if needed
 3. Test with different camera brands/codecs
 4. Implement ONVIF auto-discovery (Phase 2)
+
+## App Store Information
+
+- **App Name**: WatchBoxLive
+- **Bundle ID**: seadogger.WatchBox
+- **Team ID**: C2D392S824
+- **Platforms**: iOS 26.0+, macOS 15.0+
+- **Version**: 1.0 (Build 1)
+- **Status**: Ready for TestFlight deployment
+
+### Capabilities Required
+- **Keychain Sharing** - For secure camera credential storage
+- **Network Extensions** - For RTSP streaming and camera discovery
+
+### Privacy Descriptions
+- **Local Network Usage**: "WatchBoxLive needs access to your local network to discover and connect to security cameras on your network."
 
 ## Contributing
 

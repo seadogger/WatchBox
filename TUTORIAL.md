@@ -1122,4 +1122,151 @@ git push
 
 ---
 
-*Tutorial updated: November 27, 2025 - End of Session 2*
+## Session 3: App Store & TestFlight Deployment Setup
+
+### Overview
+Prepared the WatchBoxLive app for TestFlight deployment and App Store Connect integration.
+
+### Initial Setup Issues
+
+**Problem**: App name "WatchBox" already taken in App Store
+**Solution**: Changed display name to "WatchBoxLive"
+- Updated `CFBundleDisplayName` in Xcode project settings
+- Bundle identifier remains `seadogger.WatchBox` (unchanged)
+- Updated README to reflect new name
+
+### App Store Connect Configuration
+
+**Apple Developer Account Setup**:
+1. Created app identifier: `seadogger.WatchBox`
+2. Registered capabilities:
+   - **Keychain Sharing**: For secure camera credential storage
+   - **Network Extensions**: For RTSP streaming and camera discovery
+
+**App Store Connect**:
+- **App Name**: WatchBoxLive
+- **SKU**: WatchBox-001
+- **Apple ID**: 6755855544
+- **Platforms**: iOS, macOS, tvOS
+- **Version**: 1.0 (Build 1)
+
+### Privacy & Compliance
+
+Added required privacy descriptions to Xcode project:
+```
+INFOPLIST_KEY_NSLocalNetworkUsageDescription =
+"WatchBoxLive needs access to your local network to discover and connect to security cameras on your network."
+```
+
+### App Icon Creation
+
+Created 1024x1024px app icon using Swift script:
+- Blue gradient background (#1E3A8A to lighter blue)
+- White camera symbol icon
+- "WatchBox" text branding
+- Saved to `WatchBox/Assets.xcassets/AppIcon.appiconset/icon-1024.png`
+
+**Technical Details**:
+- Used AppKit NSImage and NSBezierPath for graphics
+- Rounded rectangle for camera body
+- Circular lens with stroke
+- System font for text rendering
+
+### Build Configuration
+
+**Cross-Platform Compatibility Fixes**:
+Fixed iOS/macOS compilation errors:
+1. **Keyboard Type Modifiers** (iOS only):
+   ```swift
+   #if os(iOS)
+   .keyboardType(.decimalPad)
+   #endif
+   ```
+
+2. **Navigation Bar Title Display Mode** (iOS only):
+   ```swift
+   #if os(iOS)
+   .navigationBarTitleDisplayMode(.inline)
+   #endif
+   ```
+
+3. **Image Initialization** (platform-specific):
+   ```swift
+   #if os(iOS)
+   Image(uiImage: image)
+   #elseif os(macOS)
+   Image(nsImage: image)
+   #endif
+   ```
+
+### Archive Build
+
+**Build Settings Verified**:
+- Team ID: C2D392S824
+- Code Sign Style: Automatic
+- Development Team configured
+- Bundle identifier: seadogger.WatchBox
+- Marketing version: 1.0
+- Build version: 1
+
+**Archive Success**:
+```bash
+xcodebuild archive -project WatchBox.xcodeproj -scheme WatchBox \
+  -sdk iphoneos -configuration Release \
+  CODE_SIGN_STYLE=Automatic DEVELOPMENT_TEAM=C2D392S824
+** ARCHIVE SUCCEEDED **
+```
+
+### Deployment Checklist
+
+✅ **Completed**:
+- [x] App created in App Store Connect
+- [x] Bundle identifier registered
+- [x] App capabilities configured (Keychain Sharing, Network Extensions)
+- [x] Privacy descriptions added
+- [x] App icon created and added
+- [x] Cross-platform build issues resolved
+- [x] Archive build successful
+- [x] Code committed and pushed to GitHub
+- [x] Developer access granted to pipersec
+
+📋 **Next Steps for TestFlight**:
+1. Open WatchBox.xcodeproj in Xcode
+2. Product → Archive
+3. Distribute App → App Store Connect
+4. Upload to TestFlight
+5. Add internal/external testers
+6. Submit for beta review (if needed)
+
+### GitHub Repository
+
+- **Repository**: https://github.com/seadogger/WatchBox
+- **Collaborators**: seadogger (owner), pipersec (developer)
+- **Latest Commit**: App icon and privacy descriptions for TestFlight deployment
+
+### Lessons Learned
+
+1. **App Naming**: Check App Store name availability before finalizing branding
+2. **Platform Conditionals**: Always wrap platform-specific SwiftUI modifiers in `#if os()` blocks for universal apps
+3. **Privacy First**: iOS requires explicit privacy descriptions for network access - add early
+4. **Icon Requirements**: App Store requires exactly 1024x1024px - use sips to resize if needed
+5. **Archive Paths**: Default Xcode archive location works better than custom Desktop paths
+
+### Time Investment
+
+- Planning & Architecture: 15 minutes
+- Build Error Resolution: 30 minutes
+- Privacy & Icon Setup: 45 minutes
+- App Store Connect Configuration: 20 minutes
+- Archive Testing: 15 minutes
+- Documentation: 30 minutes
+- **Session 3 Time**: ~2.5 hours
+
+### Total Project Time
+- **Session 1 + 2**: ~5.5 hours
+- **Session 3**: ~2.5 hours
+- **Total**: ~8 hours
+
+---
+
+*Tutorial updated: November 27, 2025 - End of Session 3*
