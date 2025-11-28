@@ -111,8 +111,6 @@
 				96037A302ED8AA1B006E95A5 /* WatchBox */,
 			);
 			name = WatchBox;
-			packageProductDependencies = (
-			);
 			productName = WatchBox;
 			productReference = 96037A2E2ED8AA1B006E95A5 /* WatchBox.app */;
 			productType = "com.apple.product-type.application";
@@ -134,8 +132,6 @@
 				96037A432ED8AA1D006E95A5 /* WatchBoxTests */,
 			);
 			name = WatchBoxTests;
-			packageProductDependencies = (
-			);
 			productName = WatchBoxTests;
 			productReference = 96037A402ED8AA1D006E95A5 /* WatchBoxTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -157,8 +153,6 @@
 				96037A4D2ED8AA1D006E95A5 /* WatchBoxUITests */,
 			);
 			name = WatchBoxUITests;
-			packageProductDependencies = (
-			);
 			productName = WatchBoxUITests;
 			productReference = 96037A4A2ED8AA1D006E95A5 /* WatchBoxUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -398,6 +392,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = WatchBoxLive;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -442,6 +437,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = WatchBoxLive;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;

@@ -1,4 +1,4 @@
-# WatchBox
+# WatchBoxLive
 
 A modern, universal Swift application for monitoring multiple security cameras with RTSP streaming, auto-discovery, and dynamic grid layout.
 
