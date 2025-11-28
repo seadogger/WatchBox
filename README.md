@@ -286,11 +286,11 @@ See [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) for the complete implementa
 ## App Store Information
 
 - **App Name**: WatchBoxLive
-- **Bundle ID**: seadogger.WatchBox
+- **Bundle ID**: seadogger.WatchBoxLive
 - **Team ID**: C2D392S824
 - **Platforms**: iOS 26.0+, macOS 15.0+
 - **Version**: 1.0 (Build 1)
-- **Status**: Ready for TestFlight deployment
+- **Status**: Uploaded to TestFlight
 
 ### Capabilities Required
 - **Keychain Sharing** - For secure camera credential storage
