@@ -32,16 +32,22 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		96037A302ED8AA1B006E95A5 /* WatchBox */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = WatchBox;
 			sourceTree = "<group>";
 		};
 		96037A432ED8AA1D006E95A5 /* WatchBoxTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = WatchBoxTests;
 			sourceTree = "<group>";
 		};
 		96037A4D2ED8AA1D006E95A5 /* WatchBoxUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = WatchBoxUITests;
 			sourceTree = "<group>";
 		};
@@ -393,6 +399,7 @@
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = WatchBoxLive;
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "WatchBoxLive needs access to your local network to discover and connect to security cameras on your network.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -438,6 +445,7 @@
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = WatchBoxLive;
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "WatchBoxLive needs access to your local network to discover and connect to security cameras on your network.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
